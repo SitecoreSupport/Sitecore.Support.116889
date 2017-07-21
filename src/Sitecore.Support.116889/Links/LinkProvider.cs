@@ -44,7 +44,11 @@
 
       if (item != null)
       {
-        if (!MatchCurrentSite(item, new SiteContext(Context.Site.SiteInfo)))
+        if (MatchCurrentSite(item, new SiteContext(Context.Site.SiteInfo)))
+        {
+          defaultUrlOptions.Language = Context.Language;
+        }
+        else
         {
           var siteInfo = ResolveTargetSite(item, true);
           defaultUrlOptions.Language = Language.Parse(siteInfo.Language);
