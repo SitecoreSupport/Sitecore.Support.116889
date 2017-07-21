@@ -1,17 +1,17 @@
-﻿using Sitecore.Configuration;
-using Sitecore.Data.Items;
-using Sitecore.Diagnostics;
-using Sitecore.Globalization;
-using Sitecore.Links;
-using Sitecore.Sites;
-using Sitecore.Web;
-using System;
-
-namespace Sitecore.Support.Links
+﻿namespace Sitecore.Support.Links
 {
+  using Sitecore.Configuration;
+  using Sitecore.Data.Items;
+  using Sitecore.Diagnostics;
+  using Sitecore.Globalization;
+  using Sitecore.Links;
+  using Sitecore.Sites;
+  using Sitecore.Web;
+  using System;
+
   public class LinkProvider : Sitecore.Links.LinkProvider
   {
-    #region Public Methods
+    #region Modified code
 
     public override string GetItemUrl(Item item, UrlOptions options)
     {
@@ -28,9 +28,9 @@ namespace Sitecore.Support.Links
       return itemUrl;
     }
 
-    #endregion Public Methods
-    
-    #region Private Methods
+    #endregion
+
+    #region Added code
 
     private void ResolveLanguage(Item item, UrlOptions defaultUrlOptions)
     {
@@ -44,13 +44,11 @@ namespace Sitecore.Support.Links
 
       if (item != null)
       {
-        if (MatchCurrentSite(item, new SiteContext(Context.Site.SiteInfo)))
+        if (!MatchCurrentSite(item, new SiteContext(Context.Site.SiteInfo)))
         {
-          defaultUrlOptions.Language = Language.Parse(Context.Site.SiteInfo.Language);
+          var siteInfo = ResolveTargetSite(item, true);
+          defaultUrlOptions.Language = Language.Parse(siteInfo.Language);
         }
-
-        var siteInfo = ResolveTargetSite(item, true);
-        defaultUrlOptions.Language = Language.Parse(siteInfo.Language);
       }
     }
 
@@ -74,11 +72,6 @@ namespace Sitecore.Support.Links
         return false;
       }
 
-      if (Settings.Rendering.SiteResolvingMatchCurrentLanguage && !item.Language.ToString().Equals(currentSite.Language, StringComparison.InvariantCultureIgnoreCase))
-      {
-        return false;
-      }
-
       var fullPath = item.Paths.FullPath;
       var startPath = currentSite.StartPath;
 
@@ -90,6 +83,6 @@ namespace Sitecore.Support.Links
       return (fullPath.Length <= startPath.Length) || (fullPath[startPath.Length] == '/');
     }
 
-    #endregion Private Methods
+    #endregion
   }
 }
