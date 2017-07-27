@@ -46,7 +46,7 @@
       {
         if (MatchCurrentSite(item, new SiteContext(Context.Site.SiteInfo)))
         {
-          defaultUrlOptions.Language = Context.Language;
+          defaultUrlOptions.Language = defaultUrlOptions.Language;
         }
         else
         {
@@ -84,7 +84,12 @@
         return false;
       }
 
-      return (fullPath.Length <= startPath.Length) || (fullPath[startPath.Length] == '/');
+      if ((fullPath.Length > startPath.Length) && (fullPath[startPath.Length] != '/'))
+      {
+        return false;
+      }
+
+      return true;
     }
 
     #endregion
