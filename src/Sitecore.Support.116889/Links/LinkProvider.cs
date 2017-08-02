@@ -44,14 +44,14 @@
 
       if (item != null)
       {
-        if (MatchCurrentSite(item, new SiteContext(Context.Site.SiteInfo)))
+        if (Context.Site != null && Context.Site.SiteInfo!= null && MatchCurrentSite(item, new SiteContext(Context.Site.SiteInfo)))
         {
           defaultUrlOptions.Language = defaultUrlOptions.Language;
         }
         else
         {
           var siteInfo = ResolveTargetSite(item, true);
-          defaultUrlOptions.Language = Language.Parse(siteInfo.Language);
+          defaultUrlOptions.Language = siteInfo != null ? Language.Parse(siteInfo.Language) : Language.Parse("en");
         }
       }
     }
